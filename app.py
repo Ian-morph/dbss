@@ -7,6 +7,8 @@ os.environ['GROQ_API_KEY'] = "sk_AM1IbshCcxwFX09Kt6TLWGdyb3FY5pH5ukc1d51GjQUSaiB
 
 app = Flask(__name__)
 
+app = Flask(__name__)
+
 @app.route("/",methods=["GET","POST"])
 def index():
     return(render_template("index.html"))
@@ -21,16 +23,10 @@ def main():
 def llama():
     return(render_template("llama.html"))
 
-@app.route("/dbs",methods=["GET","POST"])
-def dbs():
-    return(render_template("dbs.html"))
-
-
 @app.route("/llama_reply",methods=["GET","POST"])
 def llama_reply():
     q = request.form.get("q")
     # load model
-
     client = Groq()
     completion = client.chat.completions.create(
         model="llama-3.1-8b-instant",
@@ -42,6 +38,10 @@ def llama_reply():
         ]
     )
     return(render_template("llama_reply.html",r=completion.choices[0].message.content))
+
+@app.route("/dbs",methods=["GET","POST"])
+def dbs():
+    return(render_template("dbs.html"))
 
 @app.route("/prediction",methods=["GET","POST"])
 def prediction():
