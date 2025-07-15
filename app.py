@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 #groq_api_key = os.getenv('GROQ_API_KEY') 
-os.getenv('GROQ_API_KEY')  = os.getenv("groq") 
+os.environ['GROQ_API_KEY'] = os.getenv("groq")
 
 app = Flask(__name__)
 
