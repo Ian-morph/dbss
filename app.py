@@ -6,7 +6,8 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-groq_api_key = os.getenv('GROQ_API_KEY') 
+#groq_api_key = os.getenv('GROQ_API_KEY') 
+os.getenv('GROQ_API_KEY')  = os.getenv("groq") 
 
 app = Flask(__name__)
 
@@ -28,7 +29,7 @@ def llama():
 def llama_reply():
     q = request.form.get("q")
     # load model
-    client = Groq(api_key=groq_api_key)
+    client = Groq()
     completion = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[
