@@ -6,8 +6,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-#groq_api_key = os.getenv('GROQ_API_KEY') 
-os.environ['GROQ_API_KEY'] = os.getenv("groq")
+groq_api_key = os.getenv('GROQ_API_KEY') 
 
 app = Flask(__name__)
 
@@ -29,7 +28,7 @@ def llama():
 def llama_reply():
     q = request.form.get("q")
     # load model
-    client = Groq()
+    client = Groq(api_key=groq_api_key)
     completion = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[
@@ -40,6 +39,27 @@ def llama_reply():
         ]
     )
     return(render_template("llama_reply.html",r=completion.choices[0].message.content))
+
+@app.route("/deepseek",methods=["GET","POST"])
+def deepseek():
+    return(render_template("deepseek.html"))
+
+@app.route("/deepseek_reply",methods=["GET","POST"])
+def deepseek_reply():
+    q = request.form.get("q")
+    # load model
+    client = Groq(api_key=groq_api_key)
+    completion_ds = client.chat.completions.create(
+        model="deepseek-r1-distill-llama-70b",
+        messages=[
+            {
+                "role": "user",
+                "content": q
+            }
+        ]
+    )
+    return(render_template("deepseek_reply.html",r=completion_ds.choices[0].message.content))
+
 
 @app.route("/dbs",methods=["GET","POST"])
 def dbs():
