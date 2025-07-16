@@ -103,11 +103,11 @@ def stop_telegram():
 
     # The following line is used to delete the existing webhook URL for the Telegram bot
     delete_webhook_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/deleteWebhook"
-    requests.post(delete_webhook_url, json={"url": domain_url, "drop_pending_updates": True})
+    webhook_response = requests.post(delete_webhook_url, json={"url": domain_url, "drop_pending_updates": True})
 
     if webhook_response.status_code == 200:
         # set status message
-        status = "The telegram bot is stopped."
+        status = "The telegram bot is stopped. "
     else:
         status = "Failed to stop the telegram bot. Please check the logs."
     
