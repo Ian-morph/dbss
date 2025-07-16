@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import joblib
 from groq import Groq
+import requests
 
 import os
 from dotenv import load_dotenv
@@ -76,7 +77,24 @@ def prediction():
 
 @app.route("/telegram",methods=["GET","POST"])
 def telegram():
-    return(render_template("telegram.html"))
+    domain_url = 'https://dbss-telegram.onrender.com'
+
+    # The following line is used to delete the existing webhook URL for the Telegram bot
+    delete_webhook_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/deleteWebhook"
+    requests.post(delete_webhook_url, json={"url": domain_url, "drop_pending_updates": True})
+
+    # Set the webhook URL for the Telegram bot
+    set_webhook_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/setWebhook?url={domain_url}/webhook"
+    webhook_response = requests.post(set_webhook_url, json={"url": domain_url, "drop_pending_updates": True})
+
+    
+    if webhook_response.status_code == 200:
+        # set status message
+        status = "The telegram bot is running. Please check with the telegram bot. @dsai_ian_bot"
+    else:
+        status = "Failed to start the telegram bot. Please check the logs."
+    
+    return(render_template("telegram.html", status=status))
 
 if __name__ == "__main__":
     app.run()

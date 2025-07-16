@@ -4,3 +4,4 @@ jobLib
 scikit-learn
 groq
 python-dotenv
+requests
